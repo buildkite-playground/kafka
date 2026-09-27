@@ -1,0 +1,13 @@
+steps:
+  - label: ":github: Kafka CI"
+    key: "kafka-ci"
+    if: build.source == "ui" || build.source == "api"
+    agents:
+      queue: hosted
+    plugins:
+      - github-actions#v0.13.0:
+          workflow: .github/workflows/ci.yml
+          version: "0.90.0"
+          runners:
+            - runs-on: ubuntu-latest
+              queue: hosted

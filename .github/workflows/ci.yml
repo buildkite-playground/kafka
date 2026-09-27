@@ -16,6 +16,8 @@
 name: CI
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - 'trunk'
@@ -42,7 +44,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      is-trunk: ${{ github.ref == 'refs/heads/trunk' }}
-      is-public-fork: ${{ github.event.pull_request.head.repo.fork || false }}
+      is-trunk: ${{ github.event_name != 'workflow_dispatch' && github.ref == 'refs/heads/trunk' }}
+      is-public-fork: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.fork || false }}
     secrets:
       inherit
