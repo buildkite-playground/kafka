@@ -231,7 +231,8 @@ jobs:
           test-retries: ${{ matrix.run-flaky == true && '3' || '1' }}
           test-xml-output: ${{ env.job-variation }}
           test-repeat: ${{ !inputs.is-trunk && matrix.run-new && '3' || '1' }}
-          test-verbose: ${{ runner.debug == '1' }}
+          # buildkite-gha has no equivalent of the GitHub runner's step-debug mode.
+          test-verbose: false
 
       - name: Archive JUnit HTML reports
         uses: actions/upload-artifact@v4
@@ -339,7 +340,7 @@ jobs:
       - name: Checkout Test Catalog
         uses: actions/checkout@v5
         with:
-          persist-credentials: true  # Needed to commit and push later
+          persist-credentials: ${{ inputs.is-trunk }}  # Needed to commit and push later
           ref: test-catalog
       - name: Reset Catalog
         run: |
